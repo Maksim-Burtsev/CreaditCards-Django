@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+import datetime
 from dateutil.relativedelta import relativedelta
 
 
@@ -46,7 +47,7 @@ class Card(models.Model):
 
     number = models.PositiveIntegerField('Номер карты', unique=True)
 
-    release_time = models.DateTimeField('Дата выпуска', auto_now_add=True)
+    release_time = models.DateTimeField('Дата выпуска', blank=True, null=True)
 
     duration = models.PositiveIntegerField(
         'Длительность действия', choices=DURATION)
@@ -69,8 +70,14 @@ class Card(models.Model):
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
 
-        super().save(*args, **kwargs)
-        self.end_date = self.release_time + relativedelta(months=self.duration)
+        if not self.release_time and not self.end_date:
+            self.release_time = datetime.datetime.now()
+            self.end_date = self.release_time + \
+                relativedelta(months=self.duration)
+    #TODO решить проблему со временм
+        if datetime.datetime.now() >= self.end_date:
+            self.status = 'overdue'
+
         super().save(*args, **kwargs)
 
     def __str__(self):
