@@ -55,7 +55,7 @@ class Card(models.Model):
         'Дата окончания активности', blank=True, null=True)
 
     last_use = models.DateTimeField('Последнее использование', auto_now=True)
-    
+
     balance = models.DecimalField('Баланс', max_digits=10, decimal_places=2)
 
     status = models.CharField('Статус карты', max_length=255,
@@ -81,10 +81,36 @@ class Card(models.Model):
         verbose_name_plural = 'Карты'
 
 
-# class Shopping(models.Model):
-#     """Покупки"""
-#     pass
+class Shopping(models.Model):
+    """Покупки"""
 
-#     class Meta:
-#         verbose_name = ''
-#         verbose_name_plural = ''
+    name = models.CharField('Название покупки', max_length=255)
+
+    card = models.ForeignKey(Card, on_delete=models.CASCADE,
+                             related_name='shopping', verbose_name='Банковская карта')
+
+    cost = models.DecimalField('Стоимость покупки', max_digits=10,
+                               decimal_places=2)
+
+    residual = models.DecimalField('Остаток на карте', max_digits=10,
+                                   decimal_places=2, blank=True, null=True)
+
+    buy_time = models.DateTimeField('Время покупки', auto_now_add=True)
+
+    def clean(self, *args, **kwargs):
+        if self.cost <= self.card.balance:
+            return super().clean(*args, **kwargs)
+        raise ValidationError('На счёте недостаточно средств')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+
+        self.residual = self.card.balance - self.cost
+        super().save(*args, *kwargs)
+
+    def __str__(self) -> str:
+        return f'{self.name} {self.card}'
+
+    class Meta:
+        verbose_name = 'Покупка'
+        verbose_name_plural = 'Покупки'
