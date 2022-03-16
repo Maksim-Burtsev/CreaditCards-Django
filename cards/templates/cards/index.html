@@ -1,0 +1,26 @@
+{% extends 'cards/base.html' %} {% block content %}
+
+<table style="text-align: center">
+  <tbody>
+    <thead>
+      <tr>
+        <th width="20%">Серия</th>
+        <th width="20%">Номер</th>
+        <th width="20%">Дата выпуска</th>
+        <th width="20%">Конец дейстия</th>
+        <th width="20%">Статус</th>
+      </tr>
+    </thead>
+    {% for card in cards %}
+    <tr>
+      <td>{{card.series}}</td>
+      <td>{{card.number}}</td>
+      <td>{{card.release_time}}</td>
+      <td>{{card.end_date}}</td>
+      <td>{{card.status}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

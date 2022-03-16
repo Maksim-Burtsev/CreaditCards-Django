@@ -31,17 +31,17 @@ class Series(models.Model):
 class Card(models.Model):
     """Банковская карта"""
 
-    CARD_STATUS = [
+    CARD_STATUS = (
         ('active', 'Активирована'),
         ('inactivated', 'Не активирована'),
         ('overdue', 'Просрочена')
-    ]
+    )
 
-    DURATION = [
+    DURATION = (
         (1, '1 месяц'),
         (6, '6 месяцев'),
         (12, '1 год'),
-    ]
+    )
 
     series = models.ForeignKey(Series, on_delete=models.CASCADE,
                                related_name='cards', verbose_name='Серия')
@@ -50,8 +50,7 @@ class Card(models.Model):
 
     release_time = models.DateTimeField('Дата выпуска', blank=True, null=True)
 
-    duration = models.PositiveIntegerField(
-        'Длительность действия', choices=DURATION)
+    duration = models.PositiveIntegerField('Срок действия', choices=DURATION)
 
     end_date = models.DateTimeField(
         'Дата окончания активности', blank=True, null=True)
@@ -71,7 +70,7 @@ class Card(models.Model):
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
         datetime_now = datetime.datetime.now(
-                pytz.timezone('Europe/Moscow'))
+            pytz.timezone('Europe/Moscow'))
 
         if not self.release_time and not self.end_date:
             self.release_time = datetime_now
@@ -119,7 +118,7 @@ class Shopping(models.Model):
             if card_status == 'inactivated':
                 raise ValidationError('Ваша карта просрочена не активирована.')
             raise ValidationError('Ваша карта просрочена!')
-            
+
     def save(self, *args, **kwargs):
         self.full_clean()
 

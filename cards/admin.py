@@ -24,4 +24,13 @@ class ShoppingAdmin(admin.ModelAdmin):
 class CardAdmin(admin.ModelAdmin):
     fields = ('series', 'number', 'duration', 'balance', 'status')
     list_display = ('series', 'number', 'release_time', 'end_date',
-                    'last_use', 'duration', 'balance', 'status')
+                    'last_use', 'duration', 'get_balance', 'status')
+
+    def get_balance(self, obj):
+        """Форматирует баланс на карте"""
+        res = f'{obj.balance:,}'.replace(',', ' ').replace('.', ',')
+        if res.split(',')[-1] == '00':
+            return f'{res[:-3]}$'
+        return f'{res}$'
+    
+    get_balance.short_description = 'Баланс'

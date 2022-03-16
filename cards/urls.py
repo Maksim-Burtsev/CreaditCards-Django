@@ -1,5 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from cards.views import index, generate
 
 
-urlpatterns = []
+urlpatterns = [
+    path('', index, name='home'),
+    path('generate', generate, name='generate'),
+]
