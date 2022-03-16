@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 import datetime
+import pytz
 from dateutil.relativedelta import relativedelta
 
 
@@ -69,13 +70,15 @@ class Card(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
+        datetime_now = datetime.datetime.now(
+                pytz.timezone('Europe/Moscow'))
 
         if not self.release_time and not self.end_date:
-            self.release_time = datetime.datetime.now()
+            self.release_time = datetime_now
             self.end_date = self.release_time + \
                 relativedelta(months=self.duration)
-    #TODO решить проблему со временм
-        if datetime.datetime.now() >= self.end_date:
+
+        if datetime_now >= self.end_date:
             self.status = 'overdue'
 
         super().save(*args, **kwargs)
@@ -105,10 +108,18 @@ class Shopping(models.Model):
     buy_time = models.DateTimeField('Время покупки', auto_now_add=True)
 
     def clean(self, *args, **kwargs):
-        if self.cost <= self.card.balance:
-            return super().clean(*args, **kwargs)
-        raise ValidationError('На счёте недостаточно средств')
 
+        card_status = self.card.status
+
+        if self.cost <= self.card.balance and card_status == 'active':
+            return super().clean(*args, **kwargs)
+        else:
+            if self.cost > self.card.balance:
+                raise ValidationError('На счёте недостаточно средств!')
+            if card_status == 'inactivated':
+                raise ValidationError('Ваша карта просрочена не активирована.')
+            raise ValidationError('Ваша карта просрочена!')
+            
     def save(self, *args, **kwargs):
         self.full_clean()
 
