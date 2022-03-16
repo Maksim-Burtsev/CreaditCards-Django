@@ -1,5 +1,5 @@
-import re
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 
 from cards.models import Card, Series
 from cards.forms import GenerateForm
@@ -55,6 +55,16 @@ def generate(request):
     return render(request, 'cards/generate.html', context=context)
 
 
+def profile(request, card_number):
+    """Страница карты"""
+    card = Card.objects.get(number=card_number)
+    context = {
+        'card': card,
+    }
+
+    return render(request, 'cards/profile.html', context=context)
+
+
 def _generate_card_numbers(n, series_id) -> list:
     """Генерирует указанное количество уникальных номеров банковской карты"""
 
@@ -65,7 +75,6 @@ def _generate_card_numbers(n, series_id) -> list:
 
     cards = Card.objects.filter(series_id=int(series_id))
     cards_nums = [card.number for card in cards]
-
 
     while created < int(n):
 

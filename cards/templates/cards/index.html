@@ -14,7 +14,7 @@
     {% for card in cards %}
     <tr>
       <td>{{card.series}}</td>
-      <td>{{card.number}}</td>
+      <td><a href="{{ card.get_absolute_url }}">{{card.number}}</a></td>
       <td>{{card.release_time}}</td>
       <td>{{card.end_date}}</td>
       <td>{{card.status}}</td>

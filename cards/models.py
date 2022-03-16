@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
 import datetime
 import pytz
@@ -85,6 +86,9 @@ class Card(models.Model):
     def __str__(self):
         return str(self.number)
 
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'card_number': self.number})
+
     class Meta:
         verbose_name = 'Карта'
         verbose_name_plural = 'Карты'
@@ -122,11 +126,14 @@ class Shopping(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
 
-        self.residual = self.card.balance - self.cost
+        self.card.balance = self.card.balance - self.cost
+        self.residual = self.card.balance
+        
+        self.card.save()
         super().save(*args, *kwargs)
 
     def __str__(self) -> str:
-        return f'{self.name} {self.card}'
+        return f'{self.name} {self.cost}$'
 
     class Meta:
         verbose_name = 'Покупка'

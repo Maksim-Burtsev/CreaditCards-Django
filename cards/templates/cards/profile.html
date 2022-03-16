@@ -1,0 +1,13 @@
+{% extends 'cards/base.html' %}
+{% block content %}
+<div>
+    <h1>{{card.series}} {{card}}</h1>
+</div>
+<div>
+    {% for shpng in card.shopping.all %}
+        <p>
+            {{shpng}}
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}
