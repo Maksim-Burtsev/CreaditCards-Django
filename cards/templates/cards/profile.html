@@ -1,13 +1,24 @@
 {% extends 'cards/base.html' %}
 {% block content %}
 <div>
-    <h1>{{card.series}} {{card}}</h1>
+    <h1>{{card}}</h1>
+    {% if card.status == 'active'%}
+        <a href="{% url 'deactivate' card.number %}">деактивировать</a>
+    {% else %}
+        <a href="{% url 'activate' card.number %}">активировать</a>
+    {% endif %}
+        <br><br>
+        <a href="{% url 'delete' card.number%}">delete</a>
 </div>
-<div>
+<div style="font-size: 20px;">
     {% for shpng in card.shopping.all %}
         <p>
             {{shpng}}
         </p>
     {% endfor %}
+    <br>
+    <p>Статус: {{card.status}}</p>
+    <br>
+    <b>Остаток: </b> {{balance}}$
 </div>
 {% endblock %}

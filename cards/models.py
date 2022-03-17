@@ -84,7 +84,7 @@ class Card(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.number)
+        return f'{self.series} {self.number}'
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'card_number': self.number})
@@ -133,7 +133,8 @@ class Shopping(models.Model):
         super().save(*args, *kwargs)
 
     def __str__(self) -> str:
-        return f'{self.name} {self.cost}$'
+        cost = f'{self.cost:,}'.replace(',', ' ')
+        return f'{self.name} {cost}$'
 
     class Meta:
         verbose_name = 'Покупка'

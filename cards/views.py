@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect, render
 
 from cards.models import Card, Series
 from cards.forms import GenerateForm
@@ -58,12 +57,36 @@ def generate(request):
 def profile(request, card_number):
     """Страница карты"""
     card = Card.objects.get(number=card_number)
+    balance = f'{card.balance:,}'.replace(',', ' ')
     context = {
         'card': card,
+        'balance' : balance,
     }
 
     return render(request, 'cards/profile.html', context=context)
 
+def activate(request, card_number):
+    """Активирует карту"""
+    card = Card.objects.get(number=card_number)
+    card.status = 'active'
+    card.save()
+    
+    return redirect('profile', card.number)
+
+def deactivate(request, card_number):
+    """Деактивирует карту"""
+    card = Card.objects.get(number=card_number)
+    card.status = 'inactivated'
+    card.save()
+    
+    return redirect('profile', card.number)
+
+def delete(reques, card_number):
+    """Удаляет карту"""
+    card = Card.objects.get(number=card_number)
+    card.delete()
+
+    return redirect('home')
 
 def _generate_card_numbers(n, series_id) -> list:
     """Генерирует указанное количество уникальных номеров банковской карты"""
