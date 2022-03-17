@@ -3,8 +3,6 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils import timezone
 
-import datetime
-import pytz
 from dateutil.relativedelta import relativedelta
 
 
@@ -71,8 +69,6 @@ class Card(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
-        # datetime_now = datetime.datetime.now(
-        #     pytz.timezone('Europe/Moscow'))
 
         datetime_now = timezone.now()
         if not self.release_time and not self.end_date:
