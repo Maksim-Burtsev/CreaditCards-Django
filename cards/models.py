@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
+from django.utils import timezone
 
 import datetime
 import pytz
@@ -47,7 +48,7 @@ class Card(models.Model):
     series = models.ForeignKey(Series, on_delete=models.CASCADE,
                                related_name='cards', verbose_name='Серия')
 
-    number = models.PositiveIntegerField('Номер карты', unique=True)
+    number = models.PositiveBigIntegerField('Номер карты', unique=True)
 
     release_time = models.DateTimeField('Дата выпуска', blank=True, null=True)
 
@@ -70,9 +71,10 @@ class Card(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
-        datetime_now = datetime.datetime.now(
-            pytz.timezone('Europe/Moscow'))
+        # datetime_now = datetime.datetime.now(
+        #     pytz.timezone('Europe/Moscow'))
 
+        datetime_now = timezone.now()
         if not self.release_time and not self.end_date:
             self.release_time = datetime_now
             self.end_date = self.release_time + \

@@ -50,7 +50,6 @@ def generate(request):
             'end_date': end_date,
             'status': 'Не активирована'
         }
-
         return render(request, 'cards/generate_result.html', context=context)
 
     form = GenerateForm()

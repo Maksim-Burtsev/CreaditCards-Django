@@ -30,19 +30,17 @@ def _search_results(search: str) -> list:
     cards = Card.objects.all()
 
     for card in cards:
-        msk_release_time = card.release_time + timedelta(hours=3) 
-        msk_end_time = card.end_date + timedelta(hours=3)
-
+        
         if search in str(card.series) and cards not in res:
             res.append(card)
 
         elif search in str(card.number) and cards not in res:
             res.append(card)
 
-        elif search in str(msk_release_time) and cards not in res:
+        elif search in str(card.release_time) and cards not in res:
             res.append(card)
 
-        elif search in str(msk_end_time) and cards not in res:
+        elif search in str(card.end_date) and cards not in res:
             res.append(card)
         
         elif search in str(card.status) and cards not in res:
