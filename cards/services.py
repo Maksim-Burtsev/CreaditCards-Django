@@ -2,6 +2,7 @@ import random
 
 from cards.models import Card
 
+
 def _generate_card_numbers(n, series_id) -> list:
     """Генерирует указанное количество уникальных номеров банковской карты"""
 
@@ -35,7 +36,7 @@ def _search_results(search: str) -> list:
     cards = Card.objects.all()
 
     for card in cards:
-        
+
         if search in str(card.series) and cards not in res:
             res.append(card)
 
@@ -47,8 +48,8 @@ def _search_results(search: str) -> list:
 
         elif search in str(card.end_date) and cards not in res:
             res.append(card)
-        
+
         elif search in str(card.status) and cards not in res:
             res.append(card)
-        
+
     return res

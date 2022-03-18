@@ -22,12 +22,13 @@ class SeriesModelTest(TestCase):
 
         self.assertRaises(ValidationError, _series.clean)
 
+
 class CardModelTest(TestCase):
 
     def test_card(self):
 
         _series = Series()
-        _series.card_series=123456
+        _series.card_series = 123456
         _series.save()
 
         _card = Card.objects.create(
@@ -51,18 +52,19 @@ class CardModelTest(TestCase):
         )
 
         _card = Card()
-        _card.series_id=1,
-        _card.number=1294122111111,
-        _card.duration=1,
-        _card.balance=1000,
-        _card.status='active'
+        _card.series_id = 1,
+        _card.number = 1294122111111,
+        _card.duration = 1,
+        _card.balance = 1000,
+        _card.status = 'active'
 
         self.assertRaises(ValidationError, _card.clean)
+
 
 class ShoppingModelTest(TestCase):
 
     def test_shopping(self):
-        
+
         _series = Series.objects.create(
             card_series=234561,
         )
@@ -103,7 +105,7 @@ class ShoppingModelTest(TestCase):
         _shopping.name = 'Тестовая покупка'
         _shopping.card_id = _card.id
         _shopping.cost = 7777777
-        
+
         self.assertRaises(ValidationError, _shopping.clean)
 
     def test_wrong_with_card(self):
@@ -138,6 +140,6 @@ class ShoppingModelTest(TestCase):
         _shopping2.name = 'Тестовая покупка'
         _shopping2.card_id = _card2.id
         _shopping2.cost = 100
-        
+
         self.assertRaises(ValidationError, _shopping.clean)
         self.assertRaises(ValidationError, _shopping2.clean)

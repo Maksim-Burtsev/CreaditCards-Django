@@ -80,7 +80,7 @@ class ServicesSearchTest(TestCase):
 
         search_1 = _search_results('1234')
         self.assertEqual(len(search_1), 10)
-        
+
         search_2 = _search_results('active')
         self.assertEqual(len(search_2), 10)
 

@@ -10,7 +10,6 @@ class GenerateForm(forms.Form):
         queryset=Series.objects.all(),  label='Серия', empty_label=None)
     duration = forms.ChoiceField(
         choices=Card.DURATION, label='Срок окончания активности')
-
     quantity = forms.IntegerField(label='Количество', min_value=1)
 
 class SearchForm(forms.Form):

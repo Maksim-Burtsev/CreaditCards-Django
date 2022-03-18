@@ -32,17 +32,19 @@ def generate(request):
     """Генерирует банковские карты"""
 
     if request.method == 'POST':
-        
+
         form = GenerateForm(request.POST)
         if form.is_valid():
             series_id = int(form.cleaned_data['series'].id)
             quantity = int(form.cleaned_data['quantity'])
             duration = int(form.cleaned_data['duration'])
 
-            generated_cards_number = _generate_card_numbers(quantity, series_id)
+            generated_cards_number = _generate_card_numbers(
+                quantity, series_id)
 
             series = Series.objects.get(id=series_id)
-            date_created = datetime.datetime.now(pytz.timezone('Europe/Moscow'))
+            date_created = datetime.datetime.now(
+                pytz.timezone('Europe/Moscow'))
             end_date = date_created + relativedelta(months=duration)
 
             context = {
@@ -98,6 +100,3 @@ def delete(reques, card_number):
     card.delete()
 
     return redirect('home')
-
-
-

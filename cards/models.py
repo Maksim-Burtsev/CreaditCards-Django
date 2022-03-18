@@ -126,7 +126,7 @@ class Shopping(models.Model):
 
         self.card.balance = self.card.balance - self.cost
         self.residual = self.card.balance
-        
+
         self.card.save()
         super().save(*args, *kwargs)
 

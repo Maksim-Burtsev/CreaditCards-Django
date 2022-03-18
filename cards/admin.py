@@ -9,7 +9,7 @@ admin.site.register(Series)
 @admin.register(Shopping)
 class ShoppingAdmin(admin.ModelAdmin):
     fields = ('name', 'card', 'cost')
-    list_display = ('name', 'card', 'cost', 'buy_time','get_residual')
+    list_display = ('name', 'card', 'cost', 'buy_time', 'get_residual')
 
     def get_residual(self, obj):
         """Форматирует остаток на средст на карте"""
@@ -17,8 +17,9 @@ class ShoppingAdmin(admin.ModelAdmin):
         if res.split(',')[-1] == '00':
             return f'{res[:-3]}$'
         return f'{res}$'
-    
+
     get_residual.short_description = 'Остаток'
+
 
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
@@ -32,5 +33,5 @@ class CardAdmin(admin.ModelAdmin):
         if res.split(',')[-1] == '00':
             return f'{res[:-3]}$'
         return f'{res}$'
-    
+
     get_balance.short_description = 'Баланс'

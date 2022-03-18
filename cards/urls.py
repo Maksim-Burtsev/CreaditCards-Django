@@ -1,6 +1,6 @@
 from django.urls import path
 
-from cards.views import index, generate, profile, activate, deactivate, delete  
+from cards.views import index, generate, profile, activate, deactivate, delete
 
 
 urlpatterns = [
