@@ -13,7 +13,6 @@ class GenerateForm(forms.Form):
 
     quantity = forms.IntegerField(label='Количество', min_value=1)
 
-
 class SearchForm(forms.Form):
     """Форма поиска"""
 

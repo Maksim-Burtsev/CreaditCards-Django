@@ -1,5 +1,4 @@
 import random
-from datetime import timedelta
 
 from cards.models import Card
 
@@ -8,11 +7,17 @@ def _generate_card_numbers(n, series_id) -> list:
 
     MIN_NUMBER = 1000000000
     MAX_NUMBER = 9999999999
+    MAX_UNIQUE = 9*(10**9)
+
     generated_list = []
     created = 0
 
     cards = Card.objects.filter(series_id=int(series_id))
     cards_nums = [card.number for card in cards]
+    len_cards_nums = len(cards_nums)
+
+    if n > MAX_UNIQUE - len(cards_nums):
+        n = MAX_UNIQUE - len(cards_nums)
 
     while created < int(n):
 

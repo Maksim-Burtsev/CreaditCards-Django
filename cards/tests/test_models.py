@@ -26,19 +26,19 @@ class CardModelTest(TestCase):
 
     def test_card(self):
 
-        _series = Series.objects.create(
-            card_series=123456,
-        )
+        _series = Series()
+        _series.card_series=123456
+        _series.save()
 
         _card = Card.objects.create(
-            series_id=1,
+            series_id=_series.id,
             number=1234566789,
             duration=1,
             balance=1000,
             status='active',
         )
 
-        self.assertEqual(_card.series_id, 1)
+        self.assertEqual(_card.series_id, _series.id)
         self.assertEqual(_card.number, 1234566789)
         self.assertEqual(_card.duration, 1)
         self.assertEqual(_card.balance, 1000)
